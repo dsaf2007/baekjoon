@@ -7,43 +7,43 @@ int main()
     std::cin >> N >> M;
     int cnt = 0;
     std::vector<std::string> input;
-    std::vector<std::string> chess;
+    //std::vector<std::string> chess;
     int wcnt = 0;
     int bcnt = 0;
+    int tmpcnt;
 
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < M; i++)
     {
         std::string input_string;
         std::cin >> input_string;
         input.push_back(input_string);
     }
-
-    for (int i = 0; i < N - 8; i++) //체스판 내에서 8*8자르기
+    std::vector<std::vector<char>> chess(N,std::vector<char>(M));
+    std::cout << "111" <<std::endl;
+    for (int i = 0; i < M - 7; i++) //체스판 내에서 8*8자르기
     {
-        for (int j = 0; j < M - 8; j++)
+        for (int j = 0; j < N - 7; j++)
         {
-            wcnt = 0;
-            bcnt = 0;
-
+            tmpcnt = 0;
+            std::cout << tmpcnt << std::endl;
             for (int k = 0; k < 8; k++)
             {
                 for (int z = 0; z < 8; z++)
                 {
                     chess[k][z] = input[k + i][z + j]; // 자른 체스판 입력
+                    std::cout << chess[k][z];
                 }
             }
-            
+
             if (chess[0][0] == 'W')
             {
-                bcnt++;
+                flag = 'W';
             }
             else if (chess[0][0] == 'B')
             {
-                wcnt++;
+                flag = 'B';
             }
-
-            chess[0][0] = 'W';
-            flag = 'W';
+            std::cout << flag;
             for (int k = 0; k < 8; k++)
             {
                 for (int z = 0; z < 8; z++)
@@ -52,128 +52,41 @@ int main()
                     {
                         if (chess[k][z] != flag)
                         {
-                            wcnt++;
+                            tmpcnt++;
                         }
                     }
-                    else if (k % 2 != 1 && z % 2 == 0)
+                    else if (k % 2 == 1 && z % 2 == 0)
                     {
                         if (chess[k][z] == flag)
                         {
-                            wcnt++;
+                            tmpcnt++;
                         }
                     }
                     else if (k % 2 == 0 && z % 2 == 1)
                     {
                         if (chess[k][z] == flag)
                         {
-                            wcnt++;
+                            tmpcnt++;
                         }
                     }
                     else if (k % 2 == 1 && z % 2 == 0)
                     {
                         if (chess[k][z] != flag)
                         {
-                            wcnt++;
+                            tmpcnt++;
                         }
                     }
+                    std::cout << tmpcnt <<std::endl;
                 }
             }
-        }
-
-        chess[0][0] = 'B';
-        flag = 'B';
-        for (int k = 0; k < 8; k++)
-        {
-            for (int z = 0; z < 8; z++)
+            if (cnt == 0)
             {
-                if (k % 2 == 0 && z % 2 == 0)
-                {
-                    if (chess[k][z] != flag)
-                    {
-                        bcnt++;
-                    }
-                }
-                else if (k % 2 != 1 && z % 2 == 0)
-                {
-                    if (chess[k][z] == flag)
-                    {
-                        bcnt++;
-                    }
-                }
-                else if (k % 2 == 0 && z % 2 == 1)
-                {
-                    if (chess[k][z] == flag)
-                    {
-                        bcnt++;
-                    }
-                }
-                else if (k % 2 == 1 && z % 2 == 0)
-                {
-                    if (chess[k][z] != flag)
-                    {
-                        bcnt++;
-                    }
-                }
+                cnt = tmpcnt;
+            }
+            else if (tmpcnt <= cnt)
+            {
+                cnt = tmpcnt;
             }
         }
-
-        int tmpcnt;
-        if (wcnt <= bcnt)
-        {
-            tmpcnt = wcnt;
-        }
-        else
-        {
-            tmpcnt = bcnt;
-        }
-
-        if (cnt == 0)
-        {
-            cnt = tmpcnt;
-        }
-        else if (tmpcnt <= cnt)
-        {
-            cnt = tmpcnt;
-        }
-        std::cout <<cnt;
     }
-
-    std::cout << cnt;
 }
-
-// for (int i = 0; i < N; i++) // 8*8을 잘라내서 구함.
-// {
-//     for (int j = 0; j < M; j++)
-//     {
-//         if (i % 2 == 0 && j % 2 == 0)
-//         {
-//             if (chess[i][j] != flag)
-//             {
-//                 cnt++;
-//             }
-//         }
-//         else if (i % 2 != 1 && j % 2 == 0)
-//         {
-//             if (chess[i][j] == flag)
-//             {
-//                 cnt++;
-//             }
-//         }
-//         else if (i % 2 == 0 && j % 2 == 1)
-//         {
-//             if (chess[i][j] == flag)
-//             {
-//                 cnt++;
-//             }
-//         }
-//         else if (i % 2 == 1 && j % 2 == 0)
-//         {
-//             if (chess[i][j] != flag)
-//             {
-//                 cnt++;
-//             }
-//         }
-//     }
-// }
-
-// }
