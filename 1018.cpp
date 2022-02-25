@@ -20,7 +20,7 @@ int main()
     }
     std::vector<std::vector<char>> chess(N,std::vector<char>(M));
     std::cout << "111" <<std::endl;
-    for (int i = 0; i < M - 7; i++) //체스판 내에서 8*8자르기
+    for (int i = 0; i < M - 7; i++) //gi체스판 내에서 8*8자르기
     {
         for (int j = 0; j < N - 7; j++)
         {
