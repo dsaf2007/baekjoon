@@ -23,6 +23,7 @@ void dfs(int k,int n, int m)
         {
             if(visited[i] == false)
             {
+                if(k!=0 && arr[k-1] > i)continue;
                 visited[i] = true;
                 arr[k] = i;
                 dfs(k+1, n, m);
