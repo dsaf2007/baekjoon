@@ -3,90 +3,96 @@
 
 int main()
 {
-    int N, M, flag;
-    std::cin >> N >> M;
-    int cnt = 0;
     std::vector<std::string> input;
-    //std::vector<std::string> chess;
-    int wcnt = 0;
-    int bcnt = 0;
-    int tmpcnt;
+    int N, M;
+    char color;
+    int cnt, cnt2;
+    int output = INT16_MAX;
 
-    for (int i = 0; i < M; i++)
+    std::cin >> N >> M;
+
+    for (int i = 0; i < N; i++)
     {
-        std::string input_string;
-        std::cin >> input_string;
-        input.push_back(input_string);
+        std::string temp;
+        std::cin >> temp;
+        input.push_back(temp);
     }
-    std::vector<std::vector<char>> chess(N,std::vector<char>(M));
-    std::cout << "111" <<std::endl;
-    for (int i = 0; i < M - 7; i++) //gi체스판 내에서 8*8자르기
-    {
-        for (int j = 0; j < N - 7; j++)
-        {
-            tmpcnt = 0;
-            std::cout << tmpcnt << std::endl;
-            for (int k = 0; k < 8; k++)
-            {
-                for (int z = 0; z < 8; z++)
-                {
-                    chess[k][z] = input[k + i][z + j]; // 자른 체스판 입력
-                    std::cout << chess[k][z];
-                }
-            }
+    // for(int i=0;i<N;i++)
+    // {
+    //     std::cout << input[i] << std::endl;
+    // }
 
-            if (chess[0][0] == 'W')
+    for (int x = 0; x < N - 7; x++)
+    {
+        for (int y = 0; y < M - 7; y++)
+        {
+            if (input[x][y] == 'W')
             {
-                flag = 'W';
+                color = 'W';
             }
-            else if (chess[0][0] == 'B')
+            else
             {
-                flag = 'B';
+                color = 'B';
             }
-            std::cout << flag;
-            for (int k = 0; k < 8; k++)
+            cnt = 0;
+            cnt2 = 0;
+            for (int i = x; i < x + 8; i++)
             {
-                for (int z = 0; z < 8; z++)
+                for (int j = y; j < y + 8; j++)
                 {
-                    if (k % 2 == 0 && z % 2 == 0)
+                    if (i % 2 == 0)
                     {
-                        if (chess[k][z] != flag)
+                        if (j % 2== 0)
                         {
-                            tmpcnt++;
+                            if (input[i][j] == color)
+                                cnt++;
+                            else
+                                cnt2++;
+                        }
+                        else
+                        {
+                            if (input[i][j] == color)
+                                cnt2++;
+                            else
+                                cnt++;
                         }
                     }
-                    else if (k % 2 == 1 && z % 2 == 0)
+                    else
                     {
-                        if (chess[k][z] == flag)
+                        if (j % 2 == 0)
                         {
-                            tmpcnt++;
+                            if (input[i][j] == color)
+                                cnt2++;
+                            else
+                                cnt++;
+                        }
+                        else
+                        {
+                            if (input[i][j] == color)
+                                cnt++;
+                            else
+                                cnt2++;
                         }
                     }
-                    else if (k % 2 == 0 && z % 2 == 1)
-                    {
-                        if (chess[k][z] == flag)
-                        {
-                            tmpcnt++;
-                        }
-                    }
-                    else if (k % 2 == 1 && z % 2 == 0)
-                    {
-                        if (chess[k][z] != flag)
-                        {
-                            tmpcnt++;
-                        }
-                    }
-                    std::cout << tmpcnt <<std::endl;
                 }
             }
-            if (cnt == 0)
+            if(cnt < cnt2)
             {
-                cnt = tmpcnt;
+                if(output > cnt)
+                {
+                    output = cnt;
+                }
             }
-            else if (tmpcnt <= cnt)
+            else
             {
-                cnt = tmpcnt;
+                if(output > cnt2)
+                {
+                    output = cnt2;
+                }
             }
         }
     }
+    std::cout << output;
+
+    return 0;
 }
