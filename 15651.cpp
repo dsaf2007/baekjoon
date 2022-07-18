@@ -1,36 +1,34 @@
 #include <iostream>
-#define MAX 8
 
-int N, M;
-int arr[MAX];
-bool visited[MAX];
+int result[9];
+bool visited[9];
 
-void dfs(int k)
+int N,M;
+
+void combination(int k)
 {
-    if (k == M)
+    if(k == M)
     {
-        for (int i = 0; i < M; i++)
+        for(int i = 0; i < M; i++)
         {
-            std::cout << arr[i] << " ";
+            std::cout << result[i] << " ";
         }
         std::cout << "\n";
     }
     else
     {
-        for (int i = 1; i <= N; i++)
+        for(int i =1; i<= N; i++)
         {
-            visited[i] = true;
-            arr[k] = i;
-            dfs(k + 1);
-            visited[i] = false;
-        }
+            result[k] = i;
+            combination(k+1);
+        }    
     }
 }
-
 int main()
 {
-
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
     std::cin >> N >> M;
-    dfs(0);
+    combination(0);
     return 0;
 }

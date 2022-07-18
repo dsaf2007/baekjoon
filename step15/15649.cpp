@@ -7,11 +7,11 @@
 int arr[MAX];
 bool visited[MAX];
 
-void dfs(int k,int n, int m)
+void dfs(int k, int n, int m)
 {
-    if(k == m)
+    if (k == m)
     {
-        for(int i = 0; i < m; i++)
+        for (int i = 0; i < m; i++)
         {
             std::cout << arr[i] << " ";
         }
@@ -19,13 +19,13 @@ void dfs(int k,int n, int m)
     }
     else
     {
-        for(int i =1; i <= n; i++)
+        for (int i = 1; i <= n; i++)
         {
-            if(visited[i] == false)
+            if (visited[i] == false)
             {
                 visited[i] = true;
                 arr[k] = i;
-                dfs(k+1, n, m);
+                dfs(k + 1, n, m);
                 visited[i] = false;
             }
         }
@@ -34,10 +34,9 @@ void dfs(int k,int n, int m)
 
 int main()
 {
-    int N , M;
+    int N, M;
 
     std::cin >> N >> M;
 
-    dfs(0,N,M);
-
+    dfs(0, N, M);
 }
