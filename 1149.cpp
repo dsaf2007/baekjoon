@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cmath>
+#include <algorithm>
 
 int dp[1001][3];
 int result;
@@ -20,6 +20,7 @@ int main()
             std::cin >> dp[i][j];
         }
     }
+    std::cout << solve();
 
     
     return 0;
@@ -34,7 +35,7 @@ int solve()
         dp[i][2] += std::min(dp[i-1][1],dp[i-1][0]);
     }
 
-    result = std::min(dp[n-1][0],dp[n-1][1],dp[n-1][2]);
+    result = std::min({dp[n-1][0],dp[n-1][1],dp[n-1][2]});
     
     return result;
 }
