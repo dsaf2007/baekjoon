@@ -1,55 +1,37 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
 
-std::vector<int> perm;
-int visited[100];
-int N;
-int result;
+long dp[100][10];
 
-void permutation(int k);
-
+//쉬운 계단수 문제
 int main()
 {
+    int N;
     std::cin >> N;
 
-    permutation(0);
-
-    std::cout << result;
-
-    return 0;
-}
-
-void permutation(int k)
-{
-    if (k == N)
+    for(int i = 1; i < 10; i++)
     {
-        result++;
-        // for(auto x : perm)
-        // {
-        //     std::cout << x;
-        // } std::cout << "\n";
-        return;
+        dp[0][i] = 1;
     }
-    for (int i = 0; i < 10; i++)
+    
+    for(int i = 1; i < N; i++)
     {
-        if(perm.size() == 0)
+        dp[i][0] = dp[i-1][1] % 1000000000;
+        for(int j = 1; j <9; j++)
         {
-            if(i == 0) continue;
-            perm.push_back(i);
+            dp[i][j] = (dp[i-1][j-1] + dp[i-1][j+1]) % 1000000000;
         }
-        else
-        {
-            if(i == perm[k-1] -1 || i == perm[k-1] + 1) 
-            {
-                perm.push_back(i);
-            }
-            else{
-                continue;
-            }
-        }
-            permutation(k + 1);
-            perm.pop_back();
+        dp[i][9] = dp[i-1][8] % 1000000000;
         
     }
+
+    long sum =0;
+    for(int i =0; i < 10; i++)
+    {
+        sum += dp[N-1][i];
+    }
+
+    std::cout << sum % 1000000000;
+
+    return 0;
 }
