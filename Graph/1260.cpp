@@ -15,32 +15,40 @@ std::vector<int> bfs_path;
 
 void dfs(int v)
 {
-    if(visited_dfs[v] == 1)
+    if (visited_dfs[v] == 1)
     {
         return;
     }
     visited_dfs[v] = 1;
     dfs_path.push_back(v);
 
-    dfs(graph[v][0]); // 가장 작은 정점번만 방문.
+    for (int i = 0; i < graph[v].size(); i++)
+    {
+        dfs(graph[v][i]); // 가장 작은 정점번만 방문.
+    }
 }
 
 void bfs(int v)
 {
     std::queue<int> q;
     q.push(v);
+    bfs_path.push_back(v);
+    visited_bfs[v] = 1;
 
-    while(!q.empty())
+    while (!q.empty())
     {
         int inq = q.front();
         q.pop();
 
-        int temp = graph[inq][0];
-        if(visited_bfs[temp] == 0)
+        for (int i = 0; i < graph[inq].size(); i++)
         {
-            visited_bfs[temp] = 1;
-            bfs_path.push_back(temp);
-            q.push(temp);
+            int temp = graph[inq][i];
+            if (visited_bfs[temp] == 0)
+            {
+                visited_bfs[temp] = 1;
+                bfs_path.push_back(temp);
+                q.push(temp);
+            }
         }
     }
 }
@@ -62,5 +70,17 @@ int main()
     {
         std::sort(graph[i].begin(), graph[i].end());
     }
+    dfs(V);
+    bfs(V);
+    for (auto a : dfs_path)
+    {
+        std::cout << a << " ";
+    }
+    std::cout << "\n";
+    for (auto b : bfs_path)
+    {
+        std::cout << b << " ";
+    }
+    std::cout << "\n";
     return 0;
 }
