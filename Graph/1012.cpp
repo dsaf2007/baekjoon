@@ -2,6 +2,7 @@
 
 int T, M, N, K;
 int count;
+int size;
 
 int graph[50][50];
 int visited[50][50];
