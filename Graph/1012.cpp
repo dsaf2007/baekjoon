@@ -1,80 +1,71 @@
 #include <iostream>
 
-int N; // 세로
-int M; // 가로
-int K;
-int T;
-
-int ground[50][50];
-int visited[50][50];
+int T, M, N, K;
 int count;
-int size;
+
+int graph[50][50];
+int visited[50][50];
 
 void init()
 {
-    count = 0;
-    for (int i = 0; i < 50; i++)
+    for(int i = 0; i < 50; i++)
     {
-        for (int j = 0; j < 50; j++)
+        for(int j = 0; j < 50; j++)
         {
-            ground[i][j] = 0;
+            graph[i][j] = 0;
             visited[i][j] = 0;
         }
     }
+    count = 0;
 }
+
 void dfs(int x, int y)
 {
-    if (visited[y][x] == 1)
+    if(visited[y][x] == 1)
     {
         return;
     }
-    if (ground[y][x] == 0)
+    if(graph[y][x] == 0)
     {
         return;
     }
-    if (x < 0 || y < 0 || x >= M || y >= N)
+    if(x < 0 || x >= M || y < 0 || y >= N)
     {
         return;
     }
-
-    visited[y][x] = 1;
-    size++;
-
-    // std::cout << "visit x : " << x << " , y : " << y <<std::endl;
-    dfs(x, y + 1);
-    dfs(x, y - 1);
-    dfs(x + 1, y);
-    dfs(x - 1, y);
+    dfs(x,y+1);
+    dfs(x,y-1);
+    dfs(x+1,y);
+    dfs(x-1,y);
 }
-
 int main()
 {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
     std::cin >> T;
-    for (int p = 0; p < T; p++)
+
+    for(int t = 0; t < T; t++)
     {
         std::cin >> M >> N >> K;
-        for (int k = 0; k < K; k++)
+
+        for(int k = 0; k < K; k++)
         {
             int x, y;
             std::cin >> x >> y;
-
-            ground[y][x] = 1;
+            graph[y][x] = 1;
         }
-        for (int i = 0; i < N; i++)
+
+        for(int i = 0; i < N; i++)
         {
-            for (int j = 0; j < M; j++)
+            for(int j =0; j < M; j++)
             {
                 size = 0;
                 dfs(j, i);
-                if (size > 0)
+                if(size > 0)
                 {
-                    count++;
+                    count ++;
                 }
             }
         }
-        std::cout << count << "\n";
+        std::cout << count << std::endl;
         init();
     }
     return 0;
