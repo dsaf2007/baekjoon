@@ -34,6 +34,8 @@ void dfs(int x, int y)
     {
         return;
     }
+    visited[y][x] = 1;
+    size ++;
     dfs(x,y+1);
     dfs(x,y-1);
     dfs(x+1,y);
