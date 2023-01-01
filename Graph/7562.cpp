@@ -36,9 +36,9 @@ void init()
 
 void bfs(std::pair<int, int> pos)
 {
-    std::queue<std::pair<int, int> > q;
+    std::queue<std::pair<int, int> > q = std::queue<std::pair<int, int> >();
     q.push(pos);
-    visited[pos.second][pos.first] = 1;
+    visited[pos.first][pos.second] = 1;
 
     while (!q.empty())
     {
@@ -47,7 +47,7 @@ void bfs(std::pair<int, int> pos)
 
         if (inq.first == des.first && inq.second == des.second)
         {
-            break;
+            return;
         }
 
         for (auto m : move)
@@ -58,13 +58,13 @@ void bfs(std::pair<int, int> pos)
             {
                 continue;
             }
-            if (m.first < 0 || m.first >= l || m.second < 0 || m.second >= l)
+            if (temp_x < 0 || temp_x >= l || temp_y < 0 || temp_y >= l)
             {
                 continue;
             }
             visited[temp_x][temp_y] = 1;
             q.push(std::make_pair(temp_x, temp_y));
-            cnt[temp_x][temp_y] = cnt[inq.first][inq.second];
+            cnt[temp_x][temp_y] = cnt[inq.first][inq.second] + 1;
         }
     }
 }
@@ -81,12 +81,22 @@ int main()
         init();
 
         std::cin >> l;
+        if(l == 0)
+        {
+            std::cout << 0 << "\n";
+            continue;
+        }
         std::cin >> pos.first >> pos.second;
         std::cin >> des.first >> des.second;
 
         bfs(pos);
 
         std::cout << cnt[des.first][des.second];
+
+        if(k < t-1)
+        {
+            std::cout << "\n";
+        }
     }
 
     return 0;
