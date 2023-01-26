@@ -13,42 +13,42 @@ int main()
 
     std::cin >> n;
 
-    for(int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
         std::cin >> arr[i];
     }
-   
-   for(int i = 0; i < n; i++)
-   {
+
+    for (int i = 0; i < n; i++)
+    {
         dp_l[i] = 1;
-        for(int j = 0; j <= i; j++)
+        for (int j = 0; j <= i; j++)
         {
-            if((arr[j] < arr[i]) && (dp_l[i] < dp_l[j]+1))
+            if ((arr[j] < arr[i]) && (dp_l[i] < dp_l[j] + 1))
             {
                 dp_l[i] = dp_l[j] + 1;
             }
         }
-   }
+    }
 
-   for(int i = n -1 ; i >= 0; i--)
-   {
+    for (int i = n - 1; i >= 0; i--)
+    {
         dp_r[i] = 1;
-        for(int j = n-1; j >=i; j--)
+        for (int j = n - 1; j >= i; j--)
         {
-            if((arr[i] > arr[j]) && (dp_r[i] < dp_r[j] +1))
+            if ((arr[i] > arr[j]) && (dp_r[i] < dp_r[j] + 1))
             {
                 dp_r[i] = dp_r[j] + 1;
             }
         }
-   }
+    }
 
-   for(int i = 0; i <= n; i++)
-   {
+    for (int i = 0; i <= n; i++)
+    {
         result[i] = dp_l[i] + dp_r[i] - 1;
-   }
+    }
 
-   int answer = *std::max_element(result, result + n);
+    int answer = *std::max_element(result, result + n);
 
-   std::cout << answer;
+    std::cout << answer;
     return 0;
 }
