@@ -2,7 +2,9 @@
 #include <algorithm>
 
 int arr[1000];
-int dp[1000];
+int dp_l[1000];
+int dp_r[1000];
+int result[1000];
 int n;
 int main()
 {
@@ -15,49 +17,38 @@ int main()
     {
         std::cin >> arr[i];
     }
-    int max_idx = std::max_element(arr, arr+n) - arr;
-    int max = 0;
-    std::cout << max_idx << "\n";
-    bool is_max = true; 
-    int idx = 0;
-    while(is_max)
-    {
-        int temp = *std::max_element(arr+idx+1, arr+n);
-        if(temp != max)
+   
+   for(int i = 0; i < n; i++)
+   {
+        dp_l[i] = 1;
+        for(int j = 0; j <= i; j++)
         {
-            is_max = false;
-            break;
-        }
-        int max_index = std::max_element(arr, arr + n) - arr;
-        idx = max_index;
-
-
-        int length = 1;
-        int min = std::min_element(arr, arr+idx) - arr;
-        int temp_min = arr[min];
-        for(int i = min; i < idx; i++)
-        {
-            if(arr[i] > temp_min)
+            if((arr[j] < arr[i]) && (dp_l[i] < dp_l[j]+1))
             {
-                temp_min = arr[i];
-                length++;
+                dp_l[i] = dp_l[j] + 1;
             }
         }
+   }
 
-        min = std::min_element(arr+idx, arr+n) - (arr + idx);
-        temp_min = arr[min];
-        for(int i = n; i > idx; i--)
+   for(int i = n -1 ; i >= 0; i--)
+   {
+        dp_r[i] = 1;
+        for(int j = n-1; j >=i; j--)
         {
-            if(arr[i] > temp_min)
+            if((arr[i] > arr[j]) && (dp_r[i] < dp_r[j] +1))
             {
-                temp_min = arr[i];
-                length++;
+                dp_r[i] = dp_r[j] + 1;
             }
         }
-        dp[idx] = length;
-    }
-    int result = *std::max_element(dp, dp+n);
-    std::cout << result << "\n";
+   }
 
+   for(int i = 0; i <= n; i++)
+   {
+        result[i] = dp_l[i] + dp_r[i] - 1;
+   }
+
+   int answer = *std::max_element(result, result + n);
+
+   std::cout << answer;
     return 0;
 }
