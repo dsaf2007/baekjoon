@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+
 
 int n;
 int result;
-std::vector<std::pair<int, int>> dline;
-std::vector<std::pair<int, int>> iline;
-std::vector<std::pair<int, int>> pline;
+std::vector<std::pair<int, int>> line;
+int dp[500];
 
 int main()
 {
@@ -20,19 +21,24 @@ int main()
 
         std::cin >> a >> b;
 
-        if(a > b)
+        line.push_back(std::make_pair(a,b));
+    }
+    std::sort(line.begin(), line.end());
+
+    for(int i = 0; i < n; i++)
+    {
+        dp[i] = 1;
+        for(int j = 0; j < i; j++)
         {
-            dline.push_back(std::make_pair(a, b));
-        }
-        else if(a < b)
-        {
-            iline.push_back(std::make_pair(a,b));
-        }
-        else if(a == b)
-        {
-            pline.push_back(std::make_pair(a,b));
+            if(line[j].second < line[i].second && dp[i] < dp[j] + 1)
+            {
+                dp[i] = dp[j] + 1;
+            }
         }
     }
 
+    int max = *std::max_element(dp, dp + 500);
+
+    std::cout << n -max;
 
 }
