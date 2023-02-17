@@ -1,40 +1,30 @@
 #include <iostream>
+#include <algorithm>
 
-int solution();
+int n;
+int arr[300];
+int dp[300];
 
 int main()
 {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(0);
 
-    std::cout << solution();
-    return 0;
-}
-
-int solution()
-{
-    int n;
-    int* dp;
-    int* inputArr;
-
     std::cin >> n;
-
-    dp = new int[n];
-    inputArr = new int[n];
 
     for(int i = 0; i < n; i++)
     {
-        std::cin >> inputArr[i];
+        std::cin >> arr[i];
     }
 
-    dp[0] = inputArr[0];
-    dp[1] = dp[0] + inputArr[1];
-    dp[2] = std::max(inputArr[0], inputArr[1]) + inputArr[2];
+    dp[0] = arr[0];
+    dp[1] = arr[0] + arr[1];
+    dp[2] = std::max(arr[1] + arr[2],dp[0] + arr[2]);
 
     for(int i = 3; i < n; i++)
     {
-        dp[i] = std::max(inputArr[i-1]+dp[i-3], dp[i-2]) + inputArr[i];
+        dp[i] = std::max((dp[i-2] + arr[i]),(dp[i-3] + arr[i-1] + arr[i]));
     }
 
-    return dp[n-1];
+    std::cout << dp[n-1];
 }
