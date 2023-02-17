@@ -1,32 +1,34 @@
 #include <iostream>
 #include <vector>
 
-int N, K;
-std::vector<int> coin;
-int count;
+using namespace std;
+
+int n;
+int k;
+int sum, result;
+int arr[10];
 
 int main()
 {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
 
-    std::cin >> N >> K;
+    cin >> n >> k;
 
-    for (int i = 0; i < N; i++)
+    for(int i = 0; i < n; i++)
     {
-        int temp;
-        std::cin >>temp;
-        coin.push_back(temp);
+        cin >> arr[i];
     }
-
-    for (int i = N - 1; i >= 0; i--)
+    for(int i = n -1; i >= 0; i--)
     {
-        while(K >= coin[i])
+        while(arr[i] <= k)
         {
-            K -= coin[i];
-            count++;
+            k -= arr[i];
+            result++;
         }
     }
 
-    std::cout << count << std::endl;
+    cout << result << "\n";
+
+    return 0;
 }
