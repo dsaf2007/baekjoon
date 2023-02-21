@@ -1,55 +1,50 @@
-/*
-    중앙을 기준으로 색종이를 4분할 해서 풀이.
-*/
 #include <iostream>
 
-int paper[128][128];
+using namespace std;
 
-int N;
+int n;
+int arr[128][128];
 
 int w, b;
 
-void solution(int x, int y, int n)
+void divide(int start_x, int start_y, int size)
 {
-    int color = paper[x][y];
+    int color = arr[start_x][start_y];
+    for(int i = start_x; i < start_x + size; i++)
+    {
+        for(int j = start_y; j < start_y + size; j++)
+        {
+            if(arr[i][j] != color)
+            {
+                divide(start_x, start_y, size/2);
+                divide(start_x+ size /2 , start_y,size/2);
+                divide(start_x, start_y + size/2, size/2);
+                divide(start_x + size/2, start_y + size/2, size/2);
+                return;
+            }
+        }    
+    }
+    if(color == 0) w++;
+    else b++;
+
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+
+    cin >> n;
+
     for(int i = 0; i < n; i++)
     {
         for(int j = 0; j < n; j++)
         {
-            if(paper[i][j] != color)
-            {
-                solution(x,y,n);
-                solution(x+ n/2, y, n);
-                solution(x, y+n/2, n);
-                solution(x + n/2, y + n/2, n);
-
-                return;
-            }
-        }
-    }
-    if(color == 1)
-        b ++;
-    else
-        w++;
-
-    return;
-}
-int main()
-{
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
-
-    std::cin >> N;
-
-    for(int i = 0; i < N; i++)
-    {
-        for(int j = 0; j < N; j++)
-        {
-            std::cin >> paper[i][j];
+            std::cin >>arr[i][j];
         }
     }
 
-    solution(0,0,N);
+    divide(0,0,n);
 
-    std::cout << w << "\n" << b << "\n";
+    std::cout << w << "\n" << b;
 }
