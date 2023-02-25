@@ -1,16 +1,15 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include <queue>
+#include <algorithm>
 
+int n, m, r;
 std::vector<int> graph[100001];
-int visited[100001];
 int result[100001];
+int visited[100001];
 
-int root;
-int N;
-int M;
 int count;
+
 void bfs(int root)
 {
     std::queue<int> q;
@@ -25,26 +24,25 @@ void bfs(int root)
 
         for(int i = 0; i < graph[inq].size(); i++)
         {
-            int temp = graph[inq][i];
-            if(visited[temp] == 0)
+            if(visited[graph[inq][i]] == 0)
             {
-                count++;
-                result[temp] = count;
-                visited[temp] = 1;
-                q.push(temp);
+                visited[graph[inq][i]] = 1;
+                result[graph[inq][i]] = ++count;
+                q.push(graph[inq][i]);
             }
+            
         }
-    }    
+    }
 }
 
 int main()
 {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(0);
 
-    std::cin >> N >> M >> root;
-
-    for(int i = 1; i <= M; i++)
+    std::cin >> n >> m >> r;
+    
+    for(int i = 1; i <= m; i++)
     {
         int a, b;
         std::cin >> a >> b;
@@ -52,15 +50,17 @@ int main()
         graph[b].push_back(a);
     }
 
-    for(int i = 1; i <= N; i++)
+    for(int i = 1; i <= n; i++)
     {
         std::sort(graph[i].begin(), graph[i].end());
     }
-    bfs(root);
-    for(int i = 1; i <= N; i++)
-    {
-        std::cout << result[i] << "\n";
-    }
 
-    return 0;
+    bfs(r);
+
+    for(int i = 1; i <=n; i++)
+    {
+        std::cout << result[i] << '\n';
+    }
+	
+	return 0;
 }

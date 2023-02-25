@@ -1,81 +1,65 @@
 #include <iostream>
 
-int N; // 세로
-int M; // 가로
-int K;
-int T;
-
-int ground[50][50];
-int visited[50][50];
-int count;
-int size;
+int t, n , m, k;
+int graph[51][51];
+int visited[51][51];
 
 void init()
 {
-    count = 0;
-    for (int i = 0; i < 50; i++)
+    for(int i = 0; i < 51; i++)
     {
-        for (int j = 0; j < 50; j++)
+        for(int j = 0; j < 51; j++)
         {
-            ground[i][j] = 0;
+            graph[i][j] = 0;
             visited[i][j] = 0;
         }
     }
 }
-void dfs(int x, int y)
+
+int dfs(int x, int y)
 {
-    if (visited[y][x] == 1)
+    if(graph[x][y] == 1 && visited[x][y] == 0 &&
+    x >= 0 && x <= 50 && y >=0 && y <= 50)
     {
-        return;
-    }
-    if (ground[y][x] == 0)
-    {
-        return;
-    }
-    if (x < 0 || y < 0 || x >= M || y >= N)
-    {
-        return;
-    }
+        visited[x][y] = 1;
+        dfs(x + 1, y);
+        dfs(x -1 , y);
+        dfs(x, y + 1);
+        dfs(x, y - 1);
 
-    visited[y][x] = 1;
-    size++;
-
-    // std::cout << "visit x : " << x << " , y : " << y <<std::endl;
-    dfs(x, y + 1);
-    dfs(x, y - 1);
-    dfs(x + 1, y);
-    dfs(x - 1, y);
+        return 1;
+    }
+    return 0;
 }
-
 int main()
 {
     std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
-    std::cin >> T;
-    for (int p = 0; p < T; p++)
+    std::cin.tie(0);
+    
+    std::cin >> t;
+
+    for(int tk = 0; tk < t; tk++)
     {
-        std::cin >> M >> N >> K;
-        for (int k = 0; k < K; k++)
+        init();
+        std::cin >> m >> n >> k; //가로 세로 배추
+        for(int i = 0; i < k; i++)
         {
             int x, y;
             std::cin >> x >> y;
-
-            ground[y][x] = 1;
+            graph[x][y] = 1;
         }
-        for (int i = 0; i < N; i++)
+        int count = 0;
+        for(int i = 0; i <= m; i++)
         {
-            for (int j = 0; j < M; j++)
+            for(int j = 0; j <=n; j++)
             {
-                size = 0;
-                dfs(j, i);
-                if (size > 0)
+                if(dfs(i,j) == 1)
                 {
                     count++;
                 }
             }
         }
         std::cout << count << "\n";
-        init();
     }
     return 0;
 }
