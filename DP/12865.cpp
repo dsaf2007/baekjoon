@@ -1,12 +1,11 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 
-int n, k;
-
-int dp[101][100001];
+int bag[101][100001]; // 순번, 무게
 int w[101];
 int v[101];
+
+int n, k;
 
 int main()
 {
@@ -17,7 +16,6 @@ int main()
 
     for(int i = 1; i <= n; i++)
     {
-        int weight, value;
         std::cin >> w[i] >> v[i];
     }
 
@@ -25,17 +23,13 @@ int main()
     {
         for(int j = 1; j <= k; j++)
         {
-            if( j >= w[i])
+            bag[i][j] = bag[i-1][j];
+            if( j >= w[i]) // 배낭에 넣을 수 있을 때
             {
-                dp[i][j] = std::max((dp[i-1][j]), (dp[i-1][j-w[i]] + v[i]));
-            }
-            else{
-                dp[i][j] = dp[i-1][j];
+                bag[i][j] = std::max(bag[i][j], bag[i-1][j-w[i]] + v[i]);
             }
         }
     }
-
-    std::cout << dp[n][k];
-
+    std::cout << bag[n][k];
     return 0;
 }
