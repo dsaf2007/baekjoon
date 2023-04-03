@@ -1,30 +1,30 @@
 #include <iostream>
 #include <algorithm>
 
+int stair[301];
+int dp[301];
 int n;
-int arr[300];
-int dp[300];
-
 int main()
 {
     std::ios_base::sync_with_stdio(false);
-    std::cin.tie(0);
+    std::cin.tie(NULL);
 
     std::cin >> n;
 
     for(int i = 0; i < n; i++)
     {
-        std::cin >> arr[i];
+        std::cin >> stair[i];
     }
 
-    dp[0] = arr[0];
-    dp[1] = arr[0] + arr[1];
-    dp[2] = std::max(arr[1] + arr[2],dp[0] + arr[2]);
+    dp[n-1] = stair[n-1];
+    dp[n-2] = dp[n-1] + stair[n-2];
+    dp[n-3] = std::max(dp[n-1] + stair[n-3], dp[n-2]);
 
-    for(int i = 3; i < n; i++)
+    for(int i = n - 4; i >=0; i--)
     {
-        dp[i] = std::max((dp[i-2] + arr[i]),(dp[i-3] + arr[i-1] + arr[i]));
+        dp[i] = std::max(dp[i+3] + stair[i] + stair[i+1], dp[i+2] + stair[i]);
     }
 
-    std::cout << dp[n-1];
+    std::cout << dp[0];
+    return 0;
 }
