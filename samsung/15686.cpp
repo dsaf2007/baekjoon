@@ -84,7 +84,7 @@ int main()
         result.push_back(sum);
     }
 
-    std::cout << *std::min_element(result.begin(), result.end()) << std::endl;
+    std::cout << *std::min_element(result.begin(), result.end()) << "\n";
     
     return 0;
 }
