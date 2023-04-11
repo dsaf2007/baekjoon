@@ -92,7 +92,6 @@ void bfs(int x_pos, int y_pos)
         t += result[0].second;
         shark.x = result[0].first.first;
         shark.y = result[0].first.second;
-        //std::cout << shark.x << " " << shark.y << " " << result[0].second <<"\n";
     }
 }
 int main()
@@ -108,10 +107,10 @@ int main()
         for(int j = 0; j < N; j++)
         {
             std::cin >> map[i][j];
-            if(map[i][j] > 0 && map[i][j] < 9)
+            /*if(map[i][j] > 0 && map[i][j] < 9)
             {
                 fish_arr.push_back(Fish{i, j, map[i][j]});
-            }
+            }*/
             if(map[i][j] == 9)
             {
                 map[i][j] = 0;

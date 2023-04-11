@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 int N, M, K;
 
@@ -51,19 +52,22 @@ void move()
         //현재 좌표
         int cr = runner_list[num].r;
         int cc = runner_list[num].c;
-
+        int moved = 0;
         for(int i = 0; i < 4; i++) //상하좌우
         {
+            if(moved == 1) continue;
             int nr = cr + dr[i];
             int nc = cc + dc[i];
 
             if(map[nr][nc] == 0 && nr > 0 && nr <= N && nc > 0 && nc <= N)//장애물 없을 경우
             {
-                if(distance(cr, cc) - distance(nr, nc) ==  1) // 거리가 1 가까워지는 경우에만
+                if(distance(cr, cc) > distance(nr, nc)) // 거리가 1 가까워지는 경우에만
                 {
+                    //std::cout << num + 1 << "번 " << nr << " " << nc << "로 이동\n"; 
                     runner_list[num].r = nr;
                     runner_list[num].c = nc;
                     result++;
+                    moved = 1;
                 }
             }
         }
@@ -78,151 +82,16 @@ void move()
 std::pair<int, int> axisRotation(int r, int c, double center_r_, double center_c_)
 {
     double nr = (double)r - center_r_;
-    double nc = (double)nc - center_c_;
-
-    return std::pair{nc + center_c_, -nr + center_r_};
+    double nc = (double)c - center_c_;
+    std::pair<int, int> temp;
+    temp.first = nc + center_r_;
+    temp.second = -nr + center_c;
+    return temp;
 }
 
-void rotate(int map_[][12])
-{
-    int slen = 100;
-    int lr = 20; int lc = 20; int rr = 20; int rc = 20;
-    //사각형 설정
-    for(int num = 0; num < runner_list.size(); num++)
-    {
-        if(runner_list[num].arrived == 1) continue;
+void rotate(int map_[][12]);
 
-        //한 변의 길이 구하기
-        int clen;
-        int square_case;
 
-        clen = std::max(std::abs(runner_list[num].c - Exit.second), std::abs(runner_list[num].r - Exit.first ));
-
-        if(clen <= slen) //사각형 변 길이가 짧아지거나 길어진 경우
-        {
-            slen = clen;
-
-            //사각형 좌상단, 우 하단 좌표 설정
-            int temp_c, temp_r;
-            
-            if(std::abs(runner_list[num].c - Exit.second) < std::abs(runner_list[num].r - Exit.first ))//c축으로 가까운 경우 -> 위로 긴 직사각형
-            {
-                temp_c = std::max(runner_list[num].c, Exit.second);
-                temp_r = std::min(runner_list[num].r, Exit.first);
-
-                if(temp_c - slen <= 1)
-                {
-                    if(temp_r <= lr) //현제 최 좌측 사각형보다 더 왼쪽
-                    {
-                        lc = 1;
-                        rc = lc + slen;
-                        lr = temp_r;
-                        rr = lr + slen;
-                    }
-                }
-                else if(temp_r - slen <= lr)
-                {
-                    if(temp_c <= lc)
-                    {
-                        lc = temp_c - slen;
-                        rc = lc + slen;
-                        lr = temp_r;
-                        rr = rc + slen;
-                    }
-                }
-            }
-            else if(std::abs(runner_list[num].c - Exit.second) > std::abs(runner_list[num].r - Exit.first )) //c축 길이가 더 긴경우
-            {
-                temp_r = std::max(runner_list[num].r, Exit.first);
-                temp_c = std::min(runner_list[num].c, Exit.second);
-
-                if(temp_r - slen <= 1)
-                {
-                    if(temp_c <= lc) //현제 최 좌측 사각형보다 더 왼쪽
-                    {
-                        lr = 1;
-                        rr = lr + slen;
-                        lc = temp_c;
-                        rc = temp_c + slen;
-                    }
-                }
-                else if(temp_r - slen <= lr)
-                {
-                    if(temp_c <= lc)
-                    {
-                        lr = temp_r - slen;
-                        rr = lr + slen;
-                        lc = temp_c;
-                        lr = lc + slen;
-                    }
-                }
-            }
-            else // 대각선 위치일 때
-            {
-                temp_c = std::min(runner_list[num].c, Exit.second);
-                temp_r = std::min(runner_list[num].r, Exit.first);
-
-                if(temp_r <= lr)
-                {
-                    if(temp_c <= lc)
-                    {
-                        lr = temp_r;
-                        lc = temp_c;
-                        rr = lr + slen;
-                        rc = lc + slen;
-                    }
-                }
-            }
-        }
-    }
-
-    //중앙 좌표 구하기
-    center_r = (rr + lr)/2;
-    center_c = (rc + lc)/2;
-     //좌표 0 일경우 더 빼줘야함.
-
-    //회전
-
-    //범위 내 벽 회전
-    int current_r, current_c;
-    std::pair<int, int> rotated;
-    for(int i = lr; i <= rr; i++)
-    {
-        for(int j = lc; j <= rc; j++)
-        {
-            rotated = axisRotation(i, j, center_r, center_c);
-            temp_map[rotated.first][rotated.second] = map_[i][j];
-        }
-    }
-    for(int i = lr; i <= rr; i++)
-    {
-        for(int j = lc; j <= rc; j++)
-        {
-            map_[i][j] = temp_map[i][j];
-            if(map_[i][j] > 0)
-            {
-                map_[i][j]--; //회전된 벽에 대해 -1;
-            }
-        }
-    }
-
-    //범위 내 모험가 이동
-    for(int num = 0; num < runner_list.size(); num++)
-    {
-        if(runner_list[num].arrived == 1) continue;
-
-        if(runner_list[num].r >= lr && runner_list[num].r <= rr
-        && runner_list[num].c >= lc && runner_list[num].c <= rc) //범위 안일경우
-        {
-            rotated = axisRotation(runner_list[num].r, runner_list[num].c, center_r, center_c);
-            runner_list[num].r = rotated.first;
-            runner_list[num].c = rotated.second;
-        }
-    }
-    //출구 이동
-    rotated = axisRotation(Exit.first, Exit.second, center_r, center_c);
-    Exit.first = rotated.first; Exit.second = rotated.second;
-}
 
 int leftRunner()
 {
@@ -258,23 +127,28 @@ int main()
     {
         std::cin >> r >> c;
         runner_list.push_back(Runner{i,r,c,0});
-        //map[r-1][c-1] = 99;
     }
     std::cin >> r >> c;
     Exit.first = r;
     Exit.second = c;
 
+    //printMap();
+    // std::ofstream file;
+    // file.open("out2.txt",std::ios_base::out | std::ios_base::app);
+    // std::cout.rdbuf(file.rdbuf());
+
     while(1)
     {
-        total_time ++;
         if(total_time == K) break;
         if(leftRunner == 0) break;
 
-        printMap();
+        //printMap();
         move();
+       // printMap();
         rotate(map);
-
+        total_time ++;
     }
+   // std::cout << "time : " << total_time << "\n";
     std::cout << result << "\n" << Exit.first << " " << Exit.second << "\n";
     
 
@@ -299,6 +173,7 @@ void printMap()
                 int space = 0;
                 for(int k = 0; k < runner_list.size(); k++)
                 {
+                    if(runner_list[k].arrived == 1) continue;
                     if(runner_list[k].r == i && runner_list[k].c == j)
                     {
                         std::cout  <<k + 1<< "'";
@@ -324,5 +199,148 @@ void printMap()
         }
         std::cout << "\n\n";     
     }
+    std::cout << "Exit : " << Exit.first << " " << Exit.second << "\n";
     std::cout << "\n";
+}
+
+void rotate(int map_[][12])
+{
+    int slen = 100;
+    int dist = 100;
+    int lr = 20; int lc = 20; int rr = 20; int rc = 20;
+    //사각형 설정
+    for(int num = 0; num < runner_list.size(); num++)
+    {
+        if(runner_list[num].arrived == 1) continue;
+
+        //한 변의 길이 구하기
+        int clen;
+        int square_case;
+        // int temp_dist = std::min(std::abs(runner_list[num].c - Exit.second),
+        // std::abs(runner_list[num].r - Exit.first));
+
+        // if(dist < temp_dist) continue;
+
+        // dist = temp_dist;
+        // std::cout << "dist : "<<temp_dist << " \n";
+
+        clen = std::max(std::abs(runner_list[num].c - Exit.second), std::abs(runner_list[num].r - Exit.first ));
+
+        //std::cout << "clen : " << clen << "\n";
+
+        if(clen <= slen) //사각형 변 길이가 짧아지거나 길어진 경우
+        {
+            if(clen < slen)
+            {
+                lr = 20; lc = 20; rr = 20; rc = 20;
+            }
+            slen = clen;
+            
+
+            //사각형 좌상단, 우 하단 좌표 설정
+            int temp_c, temp_r;
+            
+            if(std::abs(runner_list[num].c - Exit.second) != std::abs(runner_list[num].r - Exit.first ))//
+            {
+               temp_c = std::max(runner_list[num].c, Exit.second);
+               temp_r = std::max(runner_list[num].r, Exit.first);
+
+               if(temp_c - slen < 1){ temp_c = 1;}
+               else if(temp_c - slen <= lc){temp_c -= slen;}
+               if(temp_r - slen < 1) {temp_r = 1;}
+               else if(temp_r - slen <= lr){temp_r -= slen;}
+                //std::cout << temp_r << " : " <<temp_c << "\n";
+               if(lr >= temp_r)
+               {
+                if(temp_c > lc && lr == temp_r)
+                    {
+                        continue;
+                        //std::cout << "sex\n";
+                    } 
+                    else{
+                        lr = temp_r;
+                        lc = temp_c;
+                        rr = lr + slen;
+                        rc = lc + slen;
+
+                    }
+                    
+               }
+            }
+            else // 대각선 위치일 때
+            {
+                temp_c = std::min(runner_list[num].c, Exit.second);
+                temp_r = std::min(runner_list[num].r, Exit.first);
+
+
+                if(temp_r <= lr)
+                {
+                    if(temp_c > lc && lr == temp_r)
+                    {
+                        continue;
+                        //std::cout << "sex\n";
+                    } 
+                    else{
+                        lr = temp_r;
+                        lc = temp_c;
+                        rr = lr + slen;
+                        rc = lc + slen;
+                    }
+                }
+            }
+        }//std::cout << lr << " " << lc << " " << rr << " " << rc << "\n";
+    }
+
+    
+
+    //중앙 좌표 구하기
+    center_r = (double)((double)rr + (double)lr)/2;
+    center_c = (double)((double)rc + (double)lc)/2;
+    //std::cout << center_r << " " << center_c << "\n";
+     //좌표 0 일경우 더 빼줘야함.
+
+    //회전
+    if(slen == 100) return;
+
+    //범위 내 벽 회전
+    int current_r, current_c;
+    std::pair<int, int> rotated;
+    for(int i = lr; i <= rr; i++)
+    {
+        for(int j = lc; j <= rc; j++)
+        {
+            rotated = axisRotation(i, j, center_r, center_c);
+           // std::cout << rotated.first << " " << rotated.second << "\n";
+            temp_map[rotated.first][rotated.second] = map_[i][j];
+        }
+    }
+    for(int i = lr; i <= rr; i++)
+    {
+        for(int j = lc; j <= rc; j++)
+        {
+            map_[i][j] = temp_map[i][j];
+            if(map_[i][j] > 0)
+            {
+                map_[i][j]--; //회전된 벽에 대해 -1;
+            }
+        }
+    }
+
+    //범위 내 모험가 이동
+    for(int num = 0; num < runner_list.size(); num++)
+    {
+        if(runner_list[num].arrived == 1) continue;
+
+        if(runner_list[num].r >= lr && runner_list[num].r <= rr
+        && runner_list[num].c >= lc && runner_list[num].c <= rc) //범위 안일경우
+        {
+            rotated = axisRotation(runner_list[num].r, runner_list[num].c, center_r, center_c);
+            runner_list[num].r = rotated.first;
+            runner_list[num].c = rotated.second;
+        }
+    }
+    //출구 이동
+    rotated = axisRotation(Exit.first, Exit.second, center_r, center_c);
+    Exit.first = rotated.first; Exit.second = rotated.second;
+
 }
