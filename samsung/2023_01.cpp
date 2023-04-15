@@ -250,42 +250,24 @@ void rotate(int map_[][12])
                if(temp_r - slen < 1) {temp_r = 1;}
                else if(temp_r - slen <= lr){temp_r -= slen;}
                 //std::cout << temp_r << " : " <<temp_c << "\n";
-               if(lr >= temp_r)
-               {
-                if(temp_c > lc && lr == temp_r)
-                    {
-                        continue;
-                        //std::cout << "sex\n";
-                    } 
-                    else{
-                        lr = temp_r;
-                        lc = temp_c;
-                        rr = lr + slen;
-                        rc = lc + slen;
-
-                    }
-                    
-               }
             }
             else // 대각선 위치일 때
             {
                 temp_c = std::min(runner_list[num].c, Exit.second);
                 temp_r = std::min(runner_list[num].r, Exit.first);
-
-
-                if(temp_r <= lr)
+            }
+            if(temp_r <= lr)
+            {
+                if(temp_c > lc && lr == temp_r)
                 {
-                    if(temp_c > lc && lr == temp_r)
-                    {
-                        continue;
-                        //std::cout << "sex\n";
-                    } 
-                    else{
-                        lr = temp_r;
-                        lc = temp_c;
-                        rr = lr + slen;
-                        rc = lc + slen;
-                    }
+                    continue;
+                    //std::cout << "sex\n";
+                } 
+                else{
+                    lr = temp_r;
+                    lc = temp_c;
+                    rr = lr + slen;
+                    rc = lc + slen;
                 }
             }
         }//std::cout << lr << " " << lc << " " << rr << " " << rc << "\n";
