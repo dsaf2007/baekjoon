@@ -18,6 +18,7 @@ void permutation(int k)
         {
             cout << arr[i] << " ";
         }cout << "\n";
+        
     }
     else
     {
