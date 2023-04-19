@@ -1,46 +1,54 @@
-/*
-    숫자 선택하여 중복되는 수열 없이 출력 --> 조합
-*/
 #include <iostream>
+
+
+using namespace std;
 
 int N, M;
 
-int arr[8];
-int visited[8];
+int arr[9];
+int visited[9];
+int num[9];
 
-void combination(int pos)
-{   
-    if(pos == M)
+
+void permutation(int k)
+{
+    if(k == M)
     {
-        //조합 출력;
-        for(int i = 0; i < M; i++)
+        for(int i = 0; i < k; i++)
         {
-            std::cout << arr[i] << " ";
-        }std::cout << "\n";
+            cout << arr[i] << " ";
+        }cout << "\n";
     }
     else
     {
-        for(int i = 1; i <= N; i++)
+        for(int i = 0; i < N; i++)
         {
             if(visited[i] == 0)
             {
+                arr[k] = num[i];
                 visited[i] = 1;
-                arr[pos] = i;
-                combination(pos + 1);
+                permutation(k+1);
                 visited[i] = 0;
-            }
+            }       
+            
         }
     }
-}   
+}
+
 
 int main()
 {
     std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
+    std::cin.tie(0);
 
-    std::cin >> N >> M;
+    cin >> N >> M;
 
-    combination(0);
+    for(int i = 0; i < 9; i++)
+    {
+        num[i] = i+1;
+    }
+
+    permutation(0);
 
     return 0;
 }
