@@ -57,8 +57,6 @@ int main()
             }
             else
                 std::cout << -1 << "\n";
-
-                
         }
     }
     
