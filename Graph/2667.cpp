@@ -1,69 +1,71 @@
 #include <iostream>
-#include <algorithm>
+#include <string>
 #include <vector>
+#include <algorithm>
 
-int n;
-int graph[25][25];
-int visited[25][25];
+using namespace std;
 
-std::vector<int> result;
-int cnt;
+
+int N, cnt;
+int map[26][26];
+int visited[26][26];
+
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
+
 
 void dfs(int x, int y)
 {
-    if (x >= 0 || x < 25 || y >= 0 || y < 25)
+    if(visited[x][y] == 0 && map[x][y] == 1)
     {
-        if (visited[x][y] != 1 && graph[x][y] == 1)
+        cnt++;
+        visited[x][y] = 1;
+        for(int m = 0; m < 4; m++)
         {
-            visited[x][y] = 1;
-            cnt++;
-            dfs(x + 1, y);
-            dfs(x, y + 1);
-            dfs(x - 1, y);
-            dfs(x, y - 1);
+            int nx = x + dx[m];
+            int ny = y + dy[m];
+            if(nx >= 0 && nx < N && ny >= 0 && ny < N)
+            {
+                dfs(nx, ny);
+            }
         }
     }
 }
 
+
 int main()
 {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(0);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
 
-    std::cin >> n;
-
-    for (int i = 0; i < n; i++)
+    cin >> N;
+    string input;
+    for(int i = 0; i < N; i++)
     {
-        std::string input;
-        std::cin >> input;
-        for (int j = 0; j < n; j++)
+        cin >> input;
+        for(int j = 0; j < N; j++)
         {
-            graph[i][j] = input[j] - '0';
+            map[i][j] = input[j] - '0';
         }
     }
-
-    for (int i = 0; i < n; i++)
+    vector<int> result;
+    for(int i = 0; i < N; i++)
     {
-        for (int j = 0; j < n; j++)
+        for(int j = 0; j < N; j++)
         {
             cnt = 0;
-            if (graph[i][j] == 1 && visited[i][j] == 0)
+            dfs(i, j);
+            if(cnt > 0)
             {
-                dfs(i, j);
-                if (cnt > 0)
-                {
-                    result.push_back(cnt);
-                }
+                result.push_back(cnt);
             }
         }
     }
-
-    std::sort(result.begin(), result.end());
-
-    std::cout << result.size() << "\n";
-    for (auto a : result)
+    sort(result.begin(), result.end());
+    cout << result.size() << "\n";
+    for(auto a : result) 
     {
-        std::cout << a << "\n";
+        cout << a << "\n";
     }
 
     return 0;
