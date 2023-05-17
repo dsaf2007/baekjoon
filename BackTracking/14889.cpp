@@ -1,48 +1,47 @@
 #include <iostream>
 #include <algorithm>
 
-int n;
-int arr[21][21];
-int visited[21];
+using namespace std;
 
-int min = INT16_MAX;
-int temp;
+int N;
+int members[22][22];
+int visited[22];
+int min_score = INT16_MAX;
+int score_gap;
 
-void make_team(int k, int idx)
+void getTeam(int k, int idx)
 {
-    if (k == n / 2) // 전체인원의 절반 -> 팀 구성이 완료 되었을 때
+    if(k == N/2)
     {
-        int team1 = 0;
-        int team2 = 0;
-        // 팀 점수 계산
-        for (int i = 0; i < n; i++)
+        int team1 = 0, team2 = 0;
+
+        //팀 점수 계산
+        for(int i = 1; i <= N; i++)
         {
-            for (int j = 0; j < n; j++)
+            for(int j = 1; j <= N; j++)
             {
-                if (visited[i] == 1 && visited[j] == 1)
+                if(visited[i] == 1 && visited[j] == 1)
                 {
-                    team1 += arr[i][j];
+                    team1 += members[i][j];
                 }
-                if (visited[i] == 0 && visited[j] == 0)
+                if(visited[i] == 0 && visited[j] == 0)
                 {
-                    team2 += arr[i][j];
+                    team2 += members[i][j];
                 }
             }
         }
-        temp = std::abs(team1 - team2);
-        if (min > temp)
-        {
-            min = temp;
-        }
+        score_gap = abs(team1-team2);
+
+        min_score = min(score_gap, min_score);
+
         return;
     }
-    for (int i = idx; i < n; i++)
+    for(int i = idx; i <= N; i++)
     {
-        // 팀 만들기
-        if (visited[i] != 1)
+        if(visited[i] != 1)
         {
             visited[i] = 1;
-            make_team(k + 1, i + 1);
+            getTeam(k + 1, i + 1);
             visited[i] = 0;
         }
     }
@@ -50,21 +49,23 @@ void make_team(int k, int idx)
 
 int main()
 {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(0);
-    std::cout.tie(0);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
-    std::cin >> n;
-    for (int i = 0; i < n; i++)
+    cin >> N;
+
+    for(int i = 1; i <= N; i++)
     {
-        for (int j = 0; j < n; j++)
+        for(int j = 1; j <= N; j++)
         {
-            std::cin >> arr[i][j];
+            cin >> members[i][j];
         }
     }
 
-    make_team(0, 0);
+    getTeam(0, 1);
 
-    std::cout << min;
+    cout << min_score << "\n";
+
     return 0;
 }
