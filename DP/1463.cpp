@@ -1,33 +1,37 @@
 #include <iostream>
+#include <algorithm>
 
-int n;
 int dp[1000001];
+
+using namespace std;
+
+int N;
 
 int main()
 {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(0);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
 
-    std::cin >> n;
+    cin >> N;
 
-    dp[1] = 1;
-    dp[2] = 1;
-    dp[3] = 1;
-
-    for(int i = 4; i <= n; i++)
+    for(int i = 2; i < 1000001; i++)
     {
-        dp[i] = dp[i-1] + 1;
-        if(i % 3 == 0)
-        {
-            dp[i] = std::min((dp[i/3]) + 1, dp[i]); 
-        }
-        if(i % 2 == 0)
-        {
-            dp[i] = std::min(dp[i/2] + 1, dp[i]);
-        }
+        dp[i] = i;
     }
 
-    std::cout << dp[n];
+    for(int i = 1; i < 1000001; i++)
+    {
+        int temp = dp[i] + 1;
 
+        if(i*3 <= 1000001)
+            dp[i*3] = min(dp[i*3], temp);
+        if(i*2 <= 1000001)
+            dp[i*2] = min(dp[i*2], temp);
+        
+        dp[i+1] = min(dp[i+1], temp);
+    }
+
+    cout << dp[N] << "\n";
+    
     return 0;
 }

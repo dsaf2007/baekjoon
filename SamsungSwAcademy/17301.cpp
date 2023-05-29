@@ -7,9 +7,11 @@ using namespace std;
 
 //int arr[100001];
 vector<long> arr;
-long n, q, temp, sum;
+long n, q, temp, size;
 int main()
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
     int test_case;
     cin >> test_case;
     
@@ -26,18 +28,27 @@ int main()
             temp += arr[i-1];
             arr.push_back(temp);
         }
-        for(int i = n + 1; i <= 100000; i++)
+        int duplicate = 0;
+        for(int i = n + 1; i <= 100000 + n; i++)
         {
             int temp = arr[i-1] + (arr[i - 1] - arr[i - n - 1])/n;
             arr.push_back(temp);
+            if(arr[i] - arr[i-1] == arr[i -1] - arr[i-2])
+                duplicate++;
+            if(duplicate == n )
+            {
+                size = i;
+            }
         }
-
         cin >> q;
         cout << "#" << t << " ";
         for(int i = 0; i < q; i++)
         {
             cin >>temp;
-            cout << arr[temp] - arr[temp-1]<< " ";
+            if(temp <= size)
+                cout << arr[temp] - arr[temp-1]<< " ";
+            else
+                cout << arr[size] - arr[size-1]<< " ";
         }cout << "\n";
     }
     return 0;
