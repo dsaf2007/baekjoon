@@ -6,14 +6,14 @@ using namespace std;
 int result1, result2;
 
 int N;
-int dr[] = {1, -1, 0, 0};
-int dc[] = {0, 0, 1, -1};
+int dy[] = {1, -1, 0, 0}; // 상, 하, 우, 좌
+int dx[] = {0, 0, 1, -1};
 
 char map[101][101];
 bool visited1[101][101]; // 정상
 bool visited2[101][101]; // 비정상
 
-void sol1(int r, int c, char color)
+void sol1(int r, int c, char color) //일반사람
 {
     if (visited1[r][c])
         return;
@@ -32,7 +32,7 @@ void sol1(int r, int c, char color)
     }
 }
 
-void sol2(int r, int c, char color)
+void sol2(int r, int c, char color) //색약
 {
     if (visited2[r][c])
         return;
