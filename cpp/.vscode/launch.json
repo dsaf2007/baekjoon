@@ -8,14 +8,14 @@
             "name": "(lldb) 연결",
             "type": "cppdbg",
             "request": "attach",
-            "program": "${workspaceFolder}/Graph/a.out",
+            "program": "${workspaceFolder}/samsung/a.out",
             "MIMode": "lldb"
         },
     {
         "name": "(lldb) 시작",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/Graph/a.out",
+        "program": "${workspaceFolder}/samsung/a.out",
         "args": [],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
