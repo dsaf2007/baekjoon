@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                      :::    :::    :::     */
+/*   Problem Number: 19236                             :+:    :+:      :+:    */
+/*                                                    +:+    +:+        +:+   */
+/*   By: dsaf2007 <boj.kr/u/dsaf2007>                +#+    +#+          +#+  */
+/*                                                  +#+      +#+        +#+   */
+/*   https://boj.kr/19236                          #+#        #+#      #+#    */
+/*   Solved: 2023/10/24 23:18:57 by dsaf2007      ###          ###   ##.kr    */
+/*                                                                            */
+/* ************************************************************************** */
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -39,13 +50,20 @@ void moveFish(int x, int y, Fish fish_list_[], int map_[][4])
         int nx = cx + dx[cdir];
         int ny = cy + dy[cdir];
         int dir = cdir;
-
-        while(nx < 0 || nx >=4 || ny < 0 || ny >=4 || (nx == x && ny == y))
+        
+        bool can_move = true;
+        while((nx < 0 || nx >=4 || ny < 0 || ny >=4) || (nx == x && ny == y))
         {
             dir = (dir + 1) % 8;
+            if(dir == cdir)
+            {
+                can_move = false;
+            }
             nx = fish_list_[f].x + dx[dir];
             ny = fish_list_[f].y + dy[dir];
         }
+
+        if(!can_move) continue;
 
         if(map_[nx][ny] != 0)
         {
@@ -115,7 +133,7 @@ void dfs(int x, int y, int map_[][4], Fish fish_list_[], int score)
             break;
         }
         
-        if(map_[nx][ny] > 0)
+        if(temp_map[nx][ny] > 0)
         {
             dfs(nx, ny, temp_map, temp_fish_list, score);
         }
@@ -141,7 +159,7 @@ int main()
 
     dfs(0,0,map,fish_list,0);
 
-    std::cout << result;
+    std::cout << result << "\n";
 
     return 0;
 }
